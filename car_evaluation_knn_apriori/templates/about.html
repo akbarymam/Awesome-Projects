@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}About{% endblock %}
+{% block style %}
+<style>
+    .content {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+    ul {
+        columns: 2;
+        text-align: left;
+    }
+    .card li {
+        margin-right: 1rem;
+        font-size: 20px;
+    }
+    ol {
+        columns: 3;
+        text-align: left;
+    }
+    strong {
+        font-size: 48px;
+    }
+    .names li {
+        list-style-type: none;
+    }
+    .names li::before {
+		content: "⭐ ";
+	}
+</style>
+{% endblock %}
+{% block contents %}
+<div class="card content p-5">
+    <span><strong class="text-primary">Car Desirability Analysis</strong></span><hr />
+    <h1 class="text-info">A Project By-</h1>
+    <ul class="names">
+        <li class="text-secondary">Atharv Phadnis (405C027)</li>
+        <li class="text-secondary">Kunal Patil (405C023)</li>
+        <li class="text-secondary">Sarvesh Katneshwarkar (405C014)</li>
+        <li class="text-secondary">Shubham Raut (405C035)</li>
+    </ul>
+    <hr />
+    <h2>Algorithms used:</h2>
+    <ul>
+        <li class="text-secondary">K-Nearest Neighbours (Prediction)</li>
+        <li class="text-secondary">Apriori Algorithm (Classification)</li>
+    </ul>
+    <hr />
+    <h2>Languages used:</h2>
+    <ul>
+        <li class="text-secondary">Frontend:
+            <ol>
+                <li>HTML</li>
+                <li>CSS</li>
+                <li>JavaScript</li>
+            </ol>
+        </li>
+        <li class="text-secondary">Backend:
+            <ol>
+                <li>Python</li>
+            </ol>
+        </li>
+    </ul>
+    <hr />
+    <h2>Libraries & Frameworks used:</h2>
+    <ol>
+        <li class="text-secondary">Flask</li>
+        <li class="text-secondary">Scikit-Learn</li>
+        <li class="text-secondary">Pandas</li>
+        <li class="text-secondary">Numpy</li>
+        <li class="text-secondary">Arules</li>
+        <li class="text-secondary">Bootstrap</li>
+    </ol>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+    document.querySelectorAll('a')[3].classList.add('active')
+</script>
+{% endblock %}
