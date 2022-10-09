@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block style %}
+<style>
+	.h-90 {
+		height: 89vh;
+	}
+</style>
+{% endblock %}
+{% block contents %}
+<div class="row">
+	<div class="col-md-12 col-xl-6">
+		<div class="card h-90 p-5">
+			<div class="d-flex flex-column align-items-center justify-content-center">
+				<h1>Selenium Testing</h1>
+				<ul class="fs-3 text-start text-muted my-4">
+					<li>Selenium is a portable framework for testing web applications.</li>
+					<li>Selenium provides a playback tool for authoring functional tests without the need to learn a test scripting language.</li>
+					<li>The tests can then run against most modern web browsers.</li>
+				</ul>
+				<h2>Following tests will be run upon clicking the <b class="text-primary">Test</b> button:</h2>
+				<ol class="fs-3 text-start text-muted">
+					<li>Accuracy Validation</li>
+					<li>Prediction of every case-
+						<ol type="a">
+							<li>Unacceptable</li>
+							<li>Acceptable</li>
+							<li>Preferred</li>
+							<li>Optimal</li>
+						</ol>
+					</li>
+					<li>Classification Test</li>
+					<li>Unit Testing</li>
+				</ol>
+				<button type="button" onclick="test(true);" class="mt-3 btn btn-primary btn-lg">Test</button>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-12 col-xl-6">
+		<div class="card h-90 p-5">
+			<div class="d-flex flex-column align-items-center justify-content-center">
+				<h1>Unit Testing</h1>
+				<ul class="fs-3 text-start text-muted my-4">
+					<li>Unit Testing is a type of software testing where individual units or components of a software are tested.</li>
+					<li>The purpose is to validate that each unit of the software code performs as expected.</li>
+					<li>Unit Tests isolate a section of code and verify its correctness.</li>
+					<li>A unit may be an individual function, method, procedure, module, or object.</li>
+				</ul>
+				<h2>Following tests will be run upon clicking the <b class="text-primary">Test</b> button:</h2>
+				<ol class="fs-3 text-start text-muted">
+					<li>All tests of Selenium testing on the <i>Server Side</i></li>
+					<li>Test existence of Prediction model</li>
+					<li>Verify presence of Valid data in Prediction</li>
+					<li>Verify absence of Invalid data in Prediction</li>
+				</ol>
+				<i class="text-muted mt-3">(These tests will be done automatically in Selenium testing)</i>
+				<button type="button" onclick="test(false);" class="mt-3 btn btn-primary btn-lg">Test</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h3 class="modal-title" id="staticBackdropLabel"></h3>
+			</div>
+			<div class="modal-body"></div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+  </div>
+{% endblock %}
+{% block scripts %}
+<script>
+	document.querySelectorAll('a')[2].classList.add('active')
+	const myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'), { backdrop: 'static' })
+	const test = (flag) => {
+		let type
+		if(flag) {
+			// selenium
+			type =  true
+		}
+		else {
+			// unit
+			type = false
+		}
+		fetch('/testing', {
+			method: 'POST',
+			body: JSON.stringify({ type: type }),
+		}).then(res => res.json())
+		.then(response => {
+			if(typeof response == 'string') {
+				// alert(response)
+				document.querySelector('.modal-title').innerHTML = 'Unit Testing'
+				document.querySelector('.modal-body').innerHTML = response.replace(/(?:\r\n|\r|\n)/g, '<br>')
+			}
+			else {
+				let content = '<h5>'
+				for(const key in response) {
+					content += '<span  class="fw-bold">' + key + '</span>' + " : " + response[key] + '<br />'
+				}
+				// alert(content)
+				document.querySelector('.modal-title').innerHTML = 'Selenium Testing'
+				document.querySelector('.modal-body').innerHTML = content + '</h5>'
+			}
+			myModal.show()
+		})
+	}
+</script>
+{% endblock %}

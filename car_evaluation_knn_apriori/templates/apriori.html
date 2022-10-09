@@ -1,0 +1,289 @@
+{% extends "base.html" %}
+{% block title %}Apriori{% endblock %}
+{% block style %}
+<style>
+	* {
+		font-family: Helvetica, sans-serif;
+	}
+	ul {
+		list-style-type: none;
+		text-align: left;
+	}
+	.flip-container {
+		background-color: white;
+		border-radius: 6px;
+		
+	}
+	.flip-container:hover .flipper {
+		transform: rotateY(180deg);
+	}
+	.flip-container, .front, .back {
+		height: 36vh;
+		width: 100%;
+	}
+	/* flip speed goes here */
+	.flipper {
+		transition: 0.6s;
+		transform-style: preserve-3d;
+
+		position: relative;
+	}
+
+	/* hide back of pane during swap */
+	.front, .back {
+		backface-visibility: hidden;
+
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+
+	/* front pane, placed above back */
+	.front {
+		z-index: 2;
+		/* for firefox 31 */
+		transform: rotateY(0deg);
+	}
+
+	/* back, initially hidden pane */
+	.back {
+		transform: rotateY(180deg);
+	}
+</style>
+<script>
+	const mapper = index => Object({
+		buying: [ "Selling Price", 0 ],
+		maint: [ "Maintainence Price", 0 ],
+		doors: [ "Doors", 1 ],
+		persons: [ "Persons", 1 ],
+		lug_boot: [ "Luggage Space", 2 ],
+		safety: [ "Safety", 0 ]
+	})[index]
+	const lowmedhigh = number => ['Low', 'Medium', 'High', 'Very High'][number]
+	const smallmedlarge = number => ['Small', 'Medium', 'Large'][number]
+</script>
+{% endblock %}
+{% block contents %}
+<div class="container bg-dark p-2 my-1 rounded">
+	<h3 class="text-light">Customer Desirability Trends</h3>
+	<h6 class="text-primary">
+		Following visualizations show car desirability/acceptability trends among customers taking into consideration the mentioned factors. Factors are arranged according to their importance in each case. <b class="text-info">Prices, Space & Safety</b>: <span class="text-info">(0)</span> => <span class="text-warning">Low</span>, <span class="text-info">(1)</span> => <span class="text-warning">Medium</span>, <span class="text-info">(2)</span> => <span class="text-warning">High</span>, <span class="text-info">(3)</span> => <span class="text-warning">Very High</span>
+	</h6>
+</div>
+<div class="row">
+	<div class="col-md-12 col-xl-6">
+		<div class="flip-container mt-4">
+			<div class="flipper">
+				<div class="front">
+					<!-- front content -->
+					<canvas id="unacc"></canvas>
+				</div>
+				<div class="back d-flex align-items-center justify-content-center flex-column">
+					<!-- back content -->
+					<script>
+						let curr
+						let content_unacc = '<b class="m-2 fs-4" style="color: #f00;">Undesired Car Factors</b><ul>'
+						{% for key, value in data.unacc.items() %}
+							curr = mapper('{{key}}')
+							content_unacc += '<li class="m-1 fs-5"><b>' + curr[0] + ' ➡</b> '
+							{% for i in value %}
+								content_unacc += (curr[1] ? (curr[1] == 1 ? {{ i }} : smallmedlarge({{ i }})) : lowmedhigh({{ i }})) + ", "
+							{% endfor %}
+							content_unacc = content_unacc.substring(0, content_unacc.length - 2);
+							content_unacc += '</li>'
+						{% endfor %}
+						content_unacc += '</ul>'
+						document.write(content_unacc)
+					</script>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-12 col-xl-6">
+		<div class="flip-container mt-4">
+			<div class="flipper">
+				<div class="front">
+					<!-- front content -->
+					<canvas id="acc"></canvas>
+				</div>
+				<div class="back d-flex align-items-center justify-content-center flex-column">
+					<!-- back content -->
+					<script>
+						let content_acc = '<b class="m-2 fs-4" style="color: #f60;">Acceptable Car Factors</b><ul>'
+						{% for key, value in data.acc.items() %}
+							curr = mapper('{{key}}')
+							content_acc += '<li class="m-2 fs-5"><b>' + curr[0] + ' ➡</b> '
+							{% for i in value %}
+								content_acc += (curr[1] ? (curr[1] == 1 ? {{ i }} : smallmedlarge({{ i }})) : lowmedhigh({{ i }})) + ", "
+							{% endfor %}
+							content_acc = content_acc.substring(0, content_acc.length - 2);
+							content_acc += '</li>'
+						{% endfor %}
+						content_acc += '</ul>'
+						document.write(content_acc)
+					</script>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12 col-xl-6">
+		<div class="flip-container mt-4">
+			<div class="flipper">
+				<div class="front">
+					<!-- front content -->
+					<canvas id="good"></canvas>
+				</div>
+				<div class="back d-flex align-items-center justify-content-center flex-column">
+					<!-- back content -->
+					<script>
+						let content_good = '<b class="m-2 fs-4" style="color: #fc0;">Preferred Car Factors</b><ul>'
+						{% for key, value in data.good.items() %}
+							curr = mapper('{{key}}')
+							content_good += '<li class="m-2 fs-5"><b>' + curr[0] + ' ➡</b> '
+							{% for i in value %}
+								content_good += (curr[1] ? (curr[1] == 1 ? {{ i }} : smallmedlarge({{ i }})) : lowmedhigh({{ i }})) + ", "
+							{% endfor %}
+							content_good = content_good.substring(0, content_good.length - 2);
+							content_good += '</li>'
+						{% endfor %}
+						content_good += '</ul>'
+						document.write(content_good)
+					</script>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-12 col-xl-6">
+		<div class="flip-container mt-4">
+			<div class="flipper">
+				<div class="front">
+					<!-- front content -->
+					<canvas id="vgood"></canvas>
+				</div>
+				<div class="back d-flex align-items-center justify-content-center flex-column">
+					<!-- back content -->
+					<script>
+						let content_vgood = '<b class="m-2 fs-4" style="color: #0c0;">Optimal Car Factors</b><ul>'
+						{% for key, value in data.vgood.items() %}
+							curr = mapper('{{key}}')
+							content_vgood += '<li class="m-2 fs-5"><b>' + curr[0] + ' ➡</b> '
+							{% for i in value %}
+								content_vgood += (curr[1] ? (curr[1] == 1 ? {{ i }} : smallmedlarge({{ i }})) : lowmedhigh({{ i }})) + ", "
+							{% endfor %}
+							content_vgood = content_vgood.substring(0, content_vgood.length - 2);
+							content_vgood += '</li>'
+						{% endfor %}
+						content_vgood += '</ul>'
+						document.write(content_vgood)
+					</script>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+	document.querySelectorAll('a')[1].classList.add('active')
+	const unacc = document.getElementById('unacc')
+	const acc = document.getElementById('acc')
+	const good = document.getElementById('good')
+	const vgood = document.getElementById('vgood')
+	const options = {
+		maintainAspectRatio: false,
+		legend: {
+			display: false
+		},
+		layout: {
+            padding: {
+                left: 10,
+                right: 10,
+                top: 10,
+                bottom: 10
+            }
+        },
+		scales: {
+		xAxes: [{
+			gridLines: {
+			offsetGridLines: true
+			}
+		}],
+		yAxes: [{
+			ticks: {
+			beginAtZero: true
+			}
+		}]
+		}
+	}
+	const backgroundColor = [
+		'rgba(255, 99, 132, 0.2)',
+		'rgba(54, 162, 235, 0.2)',
+		'rgba(255, 206, 86, 0.2)',
+		'rgba(75, 192, 192, 0.2)',
+		'rgba(153, 102, 255, 0.2)',
+		'rgba(255, 159, 64, 0.2)',
+	]
+	const borderColor = [
+		'rgba(255,99,132,1)',
+		'rgba(54, 162, 235, 1)',
+		'rgba(255, 206, 86, 1)',
+		'rgba(75, 192, 192, 1)',
+		'rgba(153, 102, 255, 1)',
+		'rgba(255, 159, 64, 1)',
+	]
+	const unaccChart = new Chart(unacc, {
+		type: 'bar',
+		data: {
+    labels: Object.keys({{ data.unacc|safe }}).map(value => mapper(value)[0]),
+    datasets: [{
+		data: Object.keys({{ data.unacc|safe }}).map(value => Math.max( ...{{ data.unacc|safe }}[value])),
+			backgroundColor: backgroundColor,
+			borderColor: borderColor,
+			borderWidth: 1
+			}]
+		},
+		options: { ...options, title: { display: true, text: 'Undesirable Car Factors', fontSize: 24, fontColor: '#f00' } }
+	});
+	const accChart = new Chart(acc, {
+		type: 'bar',
+		data: {
+    labels: Object.keys({{ data.acc|safe }}).map(value => mapper(value)[0]),
+    datasets: [{
+		data: Object.keys({{ data.acc|safe }}).map(value => Math.max( ...{{ data.acc|safe }}[value])),
+			backgroundColor: backgroundColor,
+			borderColor: borderColor,
+			borderWidth: 1
+			}]
+		},
+		options: { ...options, title: { display: true, text: 'Acceptable Car Factors', fontSize: 24, fontColor: '#f60' } }
+	});
+	const goodChart = new Chart(good, {
+		type: 'bar',
+		data: {
+    labels: Object.keys({{ data.good|safe }}).map(value => mapper(value)[0]),
+    datasets: [{
+		data: Object.keys({{ data.good|safe }}).map(value => Math.max( ...{{ data.good|safe }}[value])),
+			backgroundColor: backgroundColor,
+			borderColor: borderColor,
+			borderWidth: 1
+			}]
+		},
+		options: { ...options, title: { display: true, text: 'Preferred Car Factors', fontSize: 24, fontColor: '#fc0' } }
+	});
+	const vgoodChart = new Chart(vgood, {
+		type: 'bar',
+		data: {
+    labels: Object.keys({{ data.vgood|safe }}).map(value => mapper(value)[0]),
+    datasets: [{
+		data: Object.keys({{ data.vgood|safe }}).map(value => Math.max( ...{{ data.vgood|safe }}[value])),
+			backgroundColor: backgroundColor,
+			borderColor: borderColor,
+			borderWidth: 1
+			}]
+		},
+		options: { ...options, title: { display: true, text: 'Optimal Car Factors', fontSize: 24, fontColor: '#0c0' } }
+	});
+</script>
+{% endblock %}
