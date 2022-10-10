@@ -54,7 +54,7 @@ def pill():
 
             for i in ssop.find_all("div", "smokeurl"):
 
-                data["result"] = i
+                print(i["href"])
 
         else:
 
@@ -62,7 +62,7 @@ def pill():
 
             for i in rext.find_urls(rez.text):
 
-                data["result"] = i
+                print(i)
 
 search()
 
