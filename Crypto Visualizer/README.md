@@ -12,8 +12,4 @@ The application plots the relation between two crypto currencies about the desie
 </ul>
 
 ---
-<img
-  src=".\Crypto Visualizer\Plot1.png"
-  alt="Crypto Visualizer"
-  title="Crypto Visualizer"
-  style="display: inline-block; margin: 0 auto; max-width: 300px">
+![Plot1](https://user-images.githubusercontent.com/86589882/195718443-1274cfaf-4a89-4fa0-8dc4-e4b7ed773c3e.png)
