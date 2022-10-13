@@ -2,7 +2,7 @@
 ---
 Crypto Visualizer uses the coingecko api to fetch real time crypto-currency value. <br>
 
-The application plots the relation between two crypto currencies about the desied period of time, and provides a linear graph showing their relation. <br>
+The application plots the relation between two crypto currencies about the decide period of time, and provides a linear graph showing their relation. <br>
 
 ---
 <br>Libraries Used:
